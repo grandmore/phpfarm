@@ -17,7 +17,6 @@ RUN apt-get update && \
     build-essential \
     mysql-client \
     libmysqlclient-dev \
-    mysql-server \
     wget \
     libxml2-dev \
     libssl-dev \

@@ -19,5 +19,5 @@
 
     LogLevel warn
     ErrorLog /dev/stdout
-    CustomLog /dev/stdout combined
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
 </VirtualHost>
