@@ -18,6 +18,6 @@
     AddHandler fcgid-script .php
 
     LogLevel warn
-    ErrorLog ${APACHE_LOG_DIR}/error.log
-    CustomLog /dev/stdout  combined    
+    ErrorLog /dev/stdout
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
 </VirtualHost>
