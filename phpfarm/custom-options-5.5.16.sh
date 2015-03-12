@@ -18,7 +18,7 @@ configoptions="$configoptions \
     --with-mhash \
     --with-mcrypt \
     --with-libdir=$LIBPATH \
-	--with-mysql \
+	--with-mysqli \
 	"
 
 echo $configoptions
