@@ -102,10 +102,10 @@ RUN cd /phpfarm/inst/php-5.6.1 && \
 
 # add a symbolic link to php 5.3.29
 RUN ln -s /phpfarm/inst/bin/php-5.3.29 /usr/bin/php
-RUN	curl http://get.zedapp.org | bash 
+RUN	curl http://get.zedapp.org | bash
 
 #Cleanup
-RUN	rm -rf /phpfarm/src && \
+	rm -rf /phpfarm/src && \
 	apt-get clean && \
 	rm -rf /var/lib/apt/lists/*
 

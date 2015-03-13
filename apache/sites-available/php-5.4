@@ -17,8 +17,11 @@
     FCGIWrapper /phpfarm/inst/php-5.4.32/bin/php-cgi .php
     AddHandler fcgid-script .php
 
+	LogFormat "access: %>s - %b - \"%r\" " log_error
+	
     LogLevel warn
     ErrorLog /dev/stdout
-    CustomLog ${APACHE_LOG_DIR}/access.log combined
+    CustomLog /dev/stdout log_error
+    
 </VirtualHost>
 
