@@ -33,7 +33,8 @@ RUN apt-get update && \
     libmcrypt-dev \
     libt1-dev \
     libltdl-dev \
-    libmhash-dev
+    libmhash-dev \
+	graphviz
 
 # install and run the phpfarm script
 RUN git clone git://git.code.sf.net/p/phpfarm/code phpfarm
@@ -90,19 +91,40 @@ RUN cd /phpfarm/inst/php-5.5.16 && \
 	make install && \
 	echo 'zend_extension="/phpfarm/inst/php-5.5.16/lib/php/extensions/debug-non-zts-20121212/xdebug.so"' >> '/phpfarm/inst/php-5.5.16/lib/php.ini'
 
-# xdebug 5.6.1
-RUN cd /phpfarm/inst/php-5.6.1 && \
-	wget http://xdebug.org/files/xdebug-2.2.7.tgz && \
+# xhprof
+RUN cd /phpfarm/inst/php-5.6.1 && \	 
+	curl -L https://pecl.php.net/get/xhprof-0.9.4.tgz | tar xz  && \
+	cd /phpfarm/inst/php-5.6.1/xhprof-0.9.4/extension && \
+	/phpfarm/inst/php-5.6.1/bin/phpize && \
+	./configure --with-php-config=/phpfarm/inst/php-5.6.1/bin/php-config && \
+	make  && \
+	make install && \
+	mkdir /phpfarm/inst/php-5.6.1/xhprof-out &&\
+	chown www-data:www-data /phpfarm/inst/php-5.6.1/xhprof-out && \
+	echo '[xhprof]' >> '/phpfarm/inst/php-5.6.1/lib/php.ini' && \
+	echo 'extension=/phpfarm/inst/php-5.6.1/lib/php/extensions/debug-non-zts-20131226/xhprof.so' >> '/phpfarm/inst/php-5.6.1/lib/php.ini' && \
+	echo 'xhprof.output_dir=/phpfarm/inst/php-5.6.1/xhprof-out' >> '/phpfarm/inst/php-5.6.1/lib/php.ini' && \
+	echo '' >> '/phpfarm/inst/php-5.6.1/lib/php.ini'
+
+# 5.6.1 - xdebug
+RUN wget http://xdebug.org/files/xdebug-2.2.7.tgz && \
 	tar -zxf xdebug-2.2.7.tgz && \
 	cd xdebug-2.2.7 && \
 	/phpfarm/inst/php-5.6.1/bin/phpize && \
 	./configure --enable-xdebug --with-php-config=/phpfarm/inst/php-5.6.1/bin/php-config && \
 	make install && \
-	echo 'zend_extension="/phpfarm/inst/php-5.6.1/lib/php/extensions/debug-non-zts-20131226/xdebug.so"' >> '/phpfarm/inst/php-5.6.1/lib/php.ini'
+	echo '[xdebug]' >> '/phpfarm/inst/php-5.6.1/lib/php.ini' && \
+	echo 'zend_extension="/phpfarm/inst/php-5.6.1/lib/php/extensions/debug-non-zts-20131226/xdebug.so"' >> '/phpfarm/inst/php-5.6.1/lib/php.ini' && \
+	echo 'xdebug.remote_enable=1' >> '/phpfarm/inst/php-5.6.1/lib/php.ini' && \
+	echo 'xdebug.remote_connect_back=1' >> '/phpfarm/inst/php-5.6.1/lib/php.ini' && \
+	echo 'xdebug.remote_port=9000 ' >> '/phpfarm/inst/php-5.6.1/lib/php.ini' && \
+	echo 'xdebug.remote_autostart=1' >> '/phpfarm/inst/php-5.6.1/lib/php.ini' && \
+	echo '' >> '/phpfarm/inst/php-5.6.1/lib/php.ini'
+	
 
 # add a symbolic link to php 5.3.29
 RUN ln -s /phpfarm/inst/bin/php-5.3.29 /usr/bin/php
-RUN	curl http://get.zedapp.org | bash 
+RUN	curl http://get.zedapp.org | bash
 
 #Cleanup
 RUN	rm -rf /phpfarm/src && \
