@@ -122,8 +122,9 @@ RUN wget http://xdebug.org/files/xdebug-2.2.7.tgz && \
 	echo '' >> '/phpfarm/inst/php-5.6.1/lib/php.ini'
 	
 
-# add a symbolic link to php 5.3.29
+# add a symbolic link to php 5.6.1
 RUN ln -s /phpfarm/inst/bin/php-5.3.29 /usr/bin/php
+
 RUN	curl http://get.zedapp.org | bash
 
 #Cleanup
@@ -131,14 +132,12 @@ RUN	rm -rf /phpfarm/src && \
 	apt-get clean && \
 	rm -rf /var/lib/apt/lists/*
 
-
 # reconfigure Apache
 RUN rm -rf /var/www/*
 
 COPY var-www /var/www/
 COPY apache  /etc/apache2/
 
-#RUN a2ensite php-5.2 php-5.3 php-5.4 php-5.5 php-5.6
 RUN a2ensite php-5.2 php-5.3 php-5.4 php-5.5 php-5.6
 RUN a2enmod rewrite
 
